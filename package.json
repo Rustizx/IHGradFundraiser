@@ -1,0 +1,24 @@
+{
+  "name": "ihgradfundraiser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm start --prefix client",
+    "server": "node server/index.js",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm install && npm run build",
+    "in": "npm install && cd client && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^6.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "14.16.0"
+  }
+}
