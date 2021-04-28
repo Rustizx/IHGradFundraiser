@@ -5,6 +5,7 @@ import "../styles/main.css";
 
 import placeholder from "../assets/ihhs.png";
 import DonationCard from "../componets/DonationCard";
+import InConstruction from "../componets/InConstruction";
 import { BxShareAltIcon, BxChatIcon } from "../assets/icons";
 
 export default class HomePage extends Component {
@@ -22,6 +23,7 @@ export default class HomePage extends Component {
     render() {
         return (
             <Container className="home-container">
+                <InConstruction/>
                 <Row>
                     <Col md={8} style={{marginTop: "30px"}}>
                         <Image src={placeholder} fluid />
