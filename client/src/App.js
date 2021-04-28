@@ -1,24 +1,24 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import Navbar from "react-bootstrap/Navbar"
+
+import "./App.css"
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import HomePage from "./pages/HomePage";
 
 function App() {
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
-    </div>
+    <Router>
+      <Navbar className="nav justify-content-center" fixed="top" fluid="true">
+          <h1 className="nav-title">IHHS Graduation</h1>
+      </Navbar>
+      <Switch>
+        <Route exact path="/" component={HomePage}/>
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;

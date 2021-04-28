@@ -16,7 +16,8 @@
   "dependencies": {
     "concurrently": "^6.0.2",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "stripe": "^8.145.0"
   },
   "engines": {
     "node": "14.16.0"
