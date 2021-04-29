@@ -16,7 +16,7 @@ function onlyDigits(s) {
       if (d < 48 || d > 57) return false
     }
     return true
-  }
+}
 
 export default class DonationCard extends Component {
     constructor(props) {

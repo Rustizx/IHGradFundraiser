@@ -1,13 +1,14 @@
 require('dotenv').config();
 const path = require('path');
 const express = require("express");
+const io = require('@pm2/io');
 
 const stripe = require('stripe')(process.env.API_SECRET_TEST);
 
 const PORT = process.env.PORT;
 const app = express();
 
-const YOUR_DOMAIN = 'http://localhost:3000/';
+const YOUR_DOMAIN = 'https://ihgrad.com/';
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.use(express.urlencoded({ extended: true }))
@@ -40,7 +41,7 @@ app.post('/create-checkout-session', async (req, res) => {
           quantity: 1,
         },
       ],
-      //billing_address_collection: "required",
+      billing_address_collection: "required",
       mode: 'payment',
       success_url: `${YOUR_DOMAIN}?success=true`,
       cancel_url: `${YOUR_DOMAIN}`,

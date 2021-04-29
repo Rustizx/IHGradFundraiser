@@ -38,3 +38,31 @@
     text-align: center;
     color: #707070;
 }
+
+.about-us-header {
+    font-family: acumin-pro, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 30px;
+    text-align: left;
+    color: #707070;
+}
+
+.about-us-text {
+    font-family: acumin-pro, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    text-align: left;
+    color: #707070;
+}
+
+.footer-text {
+    font-family: acumin-pro, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    text-align: center;
+    color: #707070;
+    margin-bottom: 50px;
+}
