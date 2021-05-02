@@ -5,10 +5,9 @@ import ReactPlayer from 'react-player'
 import "../styles/main.css";
 
 import placeholder from "../assets/ihhs.png";
-import gradpic from "../assets/gradpic.jpg";
 import stadium from "../assets/staduim.jpeg";
 
-import DonationCard from "../componets/DonationCard";
+import DonateCard from "../componets/DonateCard";
 import InConstruction from "../componets/InConstruction";
 import { BxShareAltIcon, BxChatIcon } from "../assets/icons";
 
@@ -55,7 +54,7 @@ export default class HomePage extends Component {
                             controls /> */}
                     </Col>
                     <Col lg={4} style={{marginTop: "30px"}}> 
-                        <DonationCard />
+                        <DonateCard />
                     </Col>
                 </Row>
                 <Row style={{marginTop: 30}}>
