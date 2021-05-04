@@ -15,7 +15,7 @@ const Filter = require('bad-words');
 const PORT = process.env.PORT;
 const app = express();
 
-const YOUR_DOMAIN = 'http://localhost:3000/';
+const YOUR_DOMAIN = process.env.DOMAIN;
 
 const filter = new Filter({ placeholder: "x" });
 
