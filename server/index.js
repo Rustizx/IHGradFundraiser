@@ -49,7 +49,7 @@ const getCurrentAmountAPI = (req, res) => {
       if (!error) {
         res.status(200).json(results.rows[0]);
       } else {
-        response.status(400).json(error)
+        res.status(400).json(error)
       }
   })
 }
@@ -96,8 +96,7 @@ const getDonations = (req, res) => {
       if(!error) {
         res.status(200).json(results.rows)
       } else {
-        response.status(400).json(error)
-        console.log(error);
+        res.status(400).json(error)
       }
   })
 }
