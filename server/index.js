@@ -44,49 +44,54 @@ const pool = new Pool({
 });
 
 const getCurrentAmountAPI = (req, res) => {
+  console.log("GetCurrentAmountAPI")
   pool.query('SELECT SUM (amount) AS total FROM success', (error, results) => {
       if (!error) {
         res.status(200).json(results.rows[0]);
       } else {
         response.status(400).json(error)
-        console.log(error);
       }
   })
 }
 
 const addDonation = async (req, res) => {
+  console.log("AddDonation")
   try {
-    const name = filter.clean(req.body.name);
-    const amount = req.body.amount;
-    const message = filter.clean(req.body.message);
-    const checkout_session_id = req.body.checkout_session_id;
-    const session = await stripe.checkout.sessions.retrieve(checkout_session_id);
-    pool.query("SELECT checkout_session_id from donations;", (error, results) => {
-      const sessions = results.rows;
-      const result = sessions.some(e => isEqual(e, {
-        'checkout_session_id': req.body.token
-      }));
-      if(!result){
-        pool.query('INSERT INTO donations (name, amount, message, checkout_session_id) VALUES ($1, $2, $3, $4)', [name, amount, message, checkout_session_id], (error, results) => {
-          if (!error) {
-            res.status(201).send(`Donation added`)
-          } else {
-            res.status(400).json(error)
-            console.log(error);
-          }
-        })
-      } else {
-        res.status(400).json({ error: "already_used" })
-      }
+    try {
+      const name = filter.clean(req.body.name);
+      const amount = req.body.amount;
+      const message = filter.clean(req.body.message);
+      const checkout_session_id = req.body.checkout_session_id;
+      const session = await stripe.checkout.sessions.retrieve(checkout_session_id);
+      pool.query("SELECT checkout_session_id from donations;", (error, results) => {
+        const sessions = results.rows;
+        const result = sessions.some(e => isEqual(e, {
+          'checkout_session_id': req.body.token
+        }));
+        if(!result){
+          pool.query('INSERT INTO donations (name, amount, message, checkout_session_id) VALUES ($1, $2, $3, $4)', [name, amount, message, checkout_session_id], (error, results) => {
+            if (!error) {
+              res.status(201).json({ success: `Donation added` })
+            } else {
+              res.status(400).json(error)
+            }
+          })
+        } else {
+          res.status(400).json({ error: "already_used" })
+        }
 
-    })
-  } catch (err){
-    console.log(err)
-    res.status(400).json({ error: "bad_token" })
+      })
+    } catch (err){
+      res.status(400).json({ error: "bad_token" })
+    }
+  } catch (e) {
+    res.status(401).json({ error: "bad_message"})
+    console.log(e)
   }
 }
 
 const getDonations = (req, res) => {
+  console.log("GetDonations")
   pool.query("SELECT name, amount, message from donations;", (error, results) => {
       if(!error) {
         res.status(200).json(results.rows)
@@ -106,6 +111,7 @@ app.post("/donation-add", addDonation);
 app.get("/amount", getCurrentAmountAPI)
 
 app.post('/checkout-info', async (req, res) => {
+  console.log("CheckoutInfo")
   try {
     const session = await stripe.checkout.sessions.retrieve(req.body.token);
     pool.query("SELECT checkout_session_id from donations;", (error, results) => {
@@ -117,8 +123,9 @@ app.post('/checkout-info', async (req, res) => {
         res.status(200).json({ name: "", amount: (session.amount_total / 100)})
         try {
           pool.query("INSERT INTO success (amount, checkout_session_id) VALUES ($1, $2)", [session.amount_total / 100, req.body.token], (error, results) => {})
-        } catch (e) {}
+        } catch (e) {console.log(e)}
       } else {
+        console.log(error)
         res.status(400).json({ error: "already_used" })
       }
 
@@ -129,6 +136,7 @@ app.post('/checkout-info', async (req, res) => {
 });
 
 app.post('/create-checkout-session', async (req, res) => {
+  console.log("CreateCheckOut")
   let amount = parseInt(String(req.body.amount) + "00")
   stripe.balance.retrieve(async (err, balance) => {
     if ( amount > 500 && amount < (550000-((balance.pending[0].amount)*1.029)) && !err ) {

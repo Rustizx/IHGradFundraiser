@@ -90,8 +90,8 @@ export default class HomePage extends Component {
                         draggable
                         pauseOnHover
                     />
-                {/*<InConstruction/>*/}
-                <Row>
+                <InConstruction/>
+                <Row className="justify-content-center">
                     <Col lg={8} style={{marginTop: "30px"}}>
                         <Image src={placeholder} fluid />
                         {/*<ReactPlayer url="https://www.facebook.com/newshour/videos/367296917967310" 
