@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button, InputGroup, FormControl, Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -26,7 +28,10 @@ export default class DonateCard extends Component {
             width: 0, 
             height: 0,
             amount: "20",
+            error: "",
+            errorAmount: 5500,
         };
+
 
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -64,23 +69,40 @@ export default class DonateCard extends Component {
     handleClick = async () => {
         this.setState({isLoading: true});
         const stripe = await stripePromise;
-        const response = await fetch("/create-checkout-session", {
+        const fetchPromise = fetch("/create-checkout-session", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ amount: this.state.amount })
         });
-        const session = await response.json();
-        // When the customer clicks on the button, redirect them to Checkout.
-        const result = await stripe.redirectToCheckout({
-          sessionId: session.id,
-        });
-        if (result.error) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, display the localized error message to your customer
-          // using `result.error.message`.
-        }
+
+        fetchPromise
+            .then(response => response.json())
+            .then(json => {
+                console.log(json)
+                if(!json.error){
+                    const result = stripe.redirectToCheckout({
+                        sessionId: json.id,
+                    });
+                    if (result.error) {
+                        console.log(result.error)
+                    }
+                }
+                else {
+                    this.setState({ error: json.error, errorAmount: json.amount })
+                    toast.error(`The donation must be inbetween $5.00 and $${json.amount}.00`, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })
+            .catch(err => console.log(err))
         this.setState({isLoading: false});
       };
     

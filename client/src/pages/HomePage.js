@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Image, Col, ProgressBar, Button } from "react-bootstrap";
 import ReactPlayer from 'react-player'
+import { ToastContainer } from 'react-toastify';
 
 import "../styles/main.css";
 
@@ -9,19 +10,28 @@ import stadium from "../assets/staduim.jpeg";
 
 import DonateCard from "../componets/DonateCard";
 import InConstruction from "../componets/InConstruction";
+import { DonationCardSection } from "../componets/DonationCardSection"
 import { BxShareAltIcon, BxChatIcon } from "../assets/icons";
 
-const videoRatioWidth = 0.578;
-const videoRatioHeight = 0.65;
+
+const Divider = () => {
+    return (
+        <Row style={{marginTop: 20}}>
+            <hr style={{color: '#d4d4d4', backgroundColor: '#d4d4d4', height: 0.5, borderColor : '#d4d4d4', width: "100%"}} />
+        </Row>
+    )
+}
 
 export default class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             moneyGoal: 5500,
-            moneyFundraised: 2307,
-            totalDonations: 130,
-            currentTotalViewers: 537,
+            moneyFundraised: 0,
+            totalDonations: 0,
+            currentTotalViewers: 0,
+            donations: {},
+            amountofdonations: 0,
         }
 
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -29,10 +39,14 @@ export default class HomePage extends Component {
 
     componentDidMount() {
         this.updateWindowDimensions();
+        this.getDonationsData();
+        this.getMoneyData();
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 
     componentWillUnmount() {
+        clearTimeout(this.intervalDonationsID);
+        clearTimeout(this.intervalMoneyID);
         window.removeEventListener('resize', this.updateWindowDimensions);
     }
 
@@ -40,10 +54,43 @@ export default class HomePage extends Component {
         this.setState({ width: window.innerWidth, height: window.innerHeight });
     }
 
+    getDonationsData = () => {
+        fetch('/donations')
+          .then(response => response.json())
+          .then(res => {
+            this.setState({ donations: res, amountofdonations: res.length });
+            this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 30000);
+        });
+    }
+
+    getMoneyData = () => {
+        fetch('/amount')
+          .then(response => response.json())
+          .then(res => {
+            if(!res.total){
+                this.setState({ moneyFundraised: 0 });
+            } else {
+                this.setState({ moneyFundraised: res.total });
+            }
+            this.intervalMoneyID = setTimeout(this.getMoneyData.bind(this), 30000);
+        });
+    }
+
     render() {
         return (
             <Container className="home-container" >
-                <InConstruction/>
+                <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
+                {/*<InConstruction/>*/}
                 <Row>
                     <Col lg={8} style={{marginTop: "30px"}}>
                         <Image src={placeholder} fluid />
@@ -70,7 +117,7 @@ export default class HomePage extends Component {
                         <p className="home-donationbar-text">Needed to Complete Goal</p>
                     </Col>
                     <Col md={2}>
-                        <h3 className="home-donationbar-header">{`${this.state.totalDonations}`}</h3>
+                        <h3 className="home-donationbar-header">{`${this.state.amountofdonations}`}</h3>
                         <p className="home-donationbar-text">Donations</p>
                     </Col>
                     <Col md={2}>
@@ -90,24 +137,27 @@ export default class HomePage extends Component {
                         </Row>
                     </Col>
                 </Row>
-                <Row style={{marginTop: 20}}>
-                    <hr style={{color: '#d4d4d4', backgroundColor: '#d4d4d4', height: 0.5, borderColor : '#d4d4d4', width: "100%"}} />
-                </Row>
+                <Divider/>
                 <Row style={{marginTop: 20}}>
                     <Col lg={8}>
                         <h3 className="about-us-header">About Us</h3>
-                        <p className="about-us-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p className="about-us-text">
+                        Welcome to the IHHS Grad 2021 fundraising website! <br/><br/>
+
+                        This year, the Grade 12 class of Indian Head High School will be holding their graduation ceremony at Mosaic Stadium.
+                        In order to help support the graduating class pay for the rental fees for this facility, Bonfire Boys and friends will be holding a Sing-A-Thon fundraiser on Saturday, May 15.  <br/><br/>
+                        
+                        We are looking forward to supporting our grads as they say farewell to one journey and embark on a new one.
+                        
+                        </p>
                     </Col>
                     <Col lg={4}> 
                         <Image src={stadium} style={{borderRadius: "20px", width: "100%"}} fluid />
                     </Col>
                 </Row>
-                <Row style={{marginTop: 20}}>
-                    <hr style={{color: '#d4d4d4', backgroundColor: '#d4d4d4', height: 0.5, borderColor : '#d4d4d4', width: "100%"}} />
-                </Row>
-                {/*<Row style={{marginTop: 20}}>
-                    <hr style={{color: '#d4d4d4', backgroundColor: '#d4d4d4', height: 0.5, borderColor : '#d4d4d4', width: "100%"}} />
-                </Row>*/}
+                <Divider/>
+                <DonationCardSection donations={this.state.donations} amountofdonations={this.state.amountofdonations} />
+                <Divider/>
                 <Row style={{marginTop: 20}} className="justify-content-center">
                     <h5 className="footer-text">2021 © Josh Blayone. Developed by Josh Blayone</h5>
                 </Row>
