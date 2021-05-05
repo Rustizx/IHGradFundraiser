@@ -68,41 +68,53 @@ export default class DonateCard extends Component {
 
     handleClick = async () => {
         this.setState({isLoading: true});
-        const stripe = await stripePromise;
-        const fetchPromise = fetch("/create-checkout-session", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ amount: this.state.amount })
-        });
+        if (this.props.amountleft >= 10){
+            const stripe = await stripePromise;
+            const fetchPromise = fetch("/create-checkout-session", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount: this.state.amount })
+            });
 
-        fetchPromise
-            .then(response => response.json())
-            .then(json => {
-                console.log(json)
-                if(!json.error){
-                    const result = stripe.redirectToCheckout({
-                        sessionId: json.id,
-                    });
-                    if (result.error) {
-                        console.log(result.error)
+            fetchPromise
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json)
+                    if(!json.error){
+                        const result = stripe.redirectToCheckout({
+                            sessionId: json.id,
+                        });
+                        if (result.error) {
+                            console.log(result.error)
+                        }
                     }
-                }
-                else {
-                    this.setState({ error: json.error, errorAmount: json.amount })
-                    toast.error(`The donation must be inbetween $5.00 and $${json.amount}.00`, {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-            })
-            .catch(err => console.log(err))
+                    else {
+                        this.setState({ error: json.error, errorAmount: json.amount })
+                        toast.error(`The donation must be inbetween $5.00 and $${json.amount}.00`, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                })
+                .catch(err => console.log(err))
+        } else {
+            toast.error(`No More Donations Are Accepted`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
         this.setState({isLoading: false});
       };
     

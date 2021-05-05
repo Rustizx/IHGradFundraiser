@@ -22,6 +22,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={HomePage}/>
         <Route path="/finalize/:token" component={FinalizePage} />
+        <Route path="/facebook" render={() => (window.location = "https://www.facebook.com/ihgrad")} />
       </Switch>
     </Router>
   );

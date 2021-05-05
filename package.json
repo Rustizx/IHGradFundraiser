@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "pg": "^8.6.0",
+    "react-share": "^4.4.0",
     "stripe": "^8.145.0"
   },
   "engines": {

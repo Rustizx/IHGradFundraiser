@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Form, Col, Row, Container, Spinner, Button, Modal } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { SimpleCard } from '../componets/DonationCardSection';
 
 import "../styles/finalize.css";
@@ -71,7 +71,7 @@ export default class FinalizePage extends Component {
         const fetchPromise = fetch("/donation-add", {
             method: "POST",
             headers: {
-              'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 checkout_session_id: this.state.checkout_session_id,
@@ -79,9 +79,9 @@ export default class FinalizePage extends Component {
                 name: this.state.name,
                 message: this.state.message,
             })
-          });
-  
-          fetchPromise
+        });
+
+        fetchPromise
             .then(res => {
                 if (res.status === 201){
                     this.setState({ success: true })
@@ -113,6 +113,7 @@ export default class FinalizePage extends Component {
                 });
                 this.setState({ isLoading: false });
             })
+        
     }
 
     handleNameChange = (event) => {
@@ -132,10 +133,22 @@ export default class FinalizePage extends Component {
     }
 
     handleSubmit = () => {
-        if(this.state.name === ""){
-            this.setState({ name: "Anonymous"})
+        if(((this.state.message).length <= 200) && ((this.state.name).length <= 50)) {
+            if(this.state.name === ""){
+                this.setState({ name: "Anonymous"})
+            }
+            this.setState({ submit: true })
+        } else {
+            toast.error(`You have too many characters in either the Name field or Message field.`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
-        this.setState({ submit: true })
     }
 
     routeChange = () => {
@@ -157,9 +170,12 @@ export default class FinalizePage extends Component {
                             <Form style={{marginTop: "30px"}}>
                                 <Form.Group as={Row} controlId="formName">
                                     <Form.Label column sm={3}>
-                                        <Row>
-                                            Name
-                                        </Row>
+                                    <Row>
+                                        Name
+                                    </Row>
+                                    <Row>
+                                        {`( ${(this.state.name).length} / 50 chars )`}
+                                    </Row>
                                     </Form.Label>
                                     <Col sm={9}>
                                         {isHidden 
@@ -253,6 +269,17 @@ export default class FinalizePage extends Component {
 
         return (
             <>
+                <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                        />
                 <Container className="finalize-container">
                     {this.state.error
                         ? <ErrorScreen errortype={this.state.errortype} />

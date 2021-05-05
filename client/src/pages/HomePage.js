@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Row, Image, Col, ProgressBar, Button } from "react-bootstrap";
+import { Container, Row, Image, Col, ProgressBar, Button, Modal } from "react-bootstrap";
 import ReactPlayer from 'react-player'
 import { ToastContainer } from 'react-toastify';
+import { FacebookShareButton, TwitterShareButton, EmailShareButton } from "react-share";
+import { FacebookIcon, TwitterIcon, EmailIcon } from "react-share";
 
 import "../styles/main.css";
 
@@ -32,6 +34,7 @@ export default class HomePage extends Component {
             currentTotalViewers: 0,
             donations: {},
             amountofdonations: 0,
+            share: false,
         }
 
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -59,7 +62,7 @@ export default class HomePage extends Component {
           .then(response => response.json())
           .then(res => {
             this.setState({ donations: res, amountofdonations: res.length });
-            this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 30000);
+            this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 15000);
         });
     }
 
@@ -72,12 +75,13 @@ export default class HomePage extends Component {
             } else {
                 this.setState({ moneyFundraised: res.total });
             }
-            this.intervalMoneyID = setTimeout(this.getMoneyData.bind(this), 30000);
+            this.intervalMoneyID = setTimeout(this.getMoneyData.bind(this), 15000);
         });
     }
 
     render() {
         return (
+            <>
             <Container className="home-container" >
                 <ToastContainer
                         position="top-right"
@@ -101,7 +105,7 @@ export default class HomePage extends Component {
                             controls /> */}
                     </Col>
                     <Col lg={4} style={{marginTop: "30px"}}> 
-                        <DonateCard />
+                        <DonateCard amountleft={this.state.moneyGoal-this.state.moneyFundraised} />
                     </Col>
                 </Row>
                 <Row style={{marginTop: 30}}>
@@ -126,11 +130,11 @@ export default class HomePage extends Component {
                     </Col>
                     <Col sm={4}>
                         <Row className="justify-content-center">
-                            <Button className="share-button" variant="outline-dark">
+                            <Button className="share-button" variant="outline-dark" onClick={() => {window.location.href = "https://www.facebook.com/ihgrad"}}>
                                 <BxChatIcon/>
                                 <h3 className="share-button-text">Facebook</h3>
                             </Button>
-                            <Button className="share-button" variant="outline-dark">
+                            <Button className="share-button" variant="outline-dark" onClick={() => {this.setState({ share: true })}}>
                                 <BxShareAltIcon/>
                                 <h3 className="share-button-text">Share</h3>
                             </Button>
@@ -162,6 +166,48 @@ export default class HomePage extends Component {
                     <h5 className="footer-text">2021 © Josh Blayone. Developed by Josh Blayone</h5>
                 </Row>
             </Container>
+            <Modal
+                    show={this.state.share}
+                    onHide={() => {this.setState({ share: false, })}}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title className="form-text">Share</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Row className="justify-content-around">
+                            <FacebookShareButton
+                                url={"https://ihgrad.com"}
+                                quote={"Indian Head High School Graduation Fundraiser"}
+                                hashtag={"#ihgrad"}
+                                description={"Help the IHHS Grade Class of 2021 fundraise for their upcoming Graduation"}
+                                className="Demo__some-network__share-button"
+                            >
+                                <FacebookIcon size={32} round />
+                            </FacebookShareButton>
+                            <TwitterShareButton
+                                url={"https://ihgrad.com"}
+                                quote={"Indian Head High School Graduation Fundraiser"}
+                                hashtag={"#ihgrad"}
+                            >
+                                <TwitterIcon size={32} round />
+                            </TwitterShareButton>
+                            <EmailShareButton
+                                subject="Help Fundraise for the Indian Head High School Graduation"
+                                url={"https://ihgrad.com"}
+                                body="Hey there! I was wondering if you would be able to help me fundraise for the Indian Head High School Graduation."
+                            >
+                                <EmailIcon size={32} round />
+                            </EmailShareButton>
+                        </Row>
+                        <p style={{marginTop: "10px"}} className="form-text">Help by sharing with your friends and family!</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => {this.setState({ share: false, })}}>
+                            Back
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
         )
     }
 }

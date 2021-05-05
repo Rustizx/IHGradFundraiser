@@ -16,7 +16,7 @@ export default function InConstruction() {
             <Modal.Title>Under Construction</Modal.Title>
           </Modal.Header>
           <Modal.Body>Currently you are viewing the test website. None of the presented stats are correct. Also the payment methods are all in testing, so no real donations will go anywhere.</Modal.Body>
-          <Modal.Body>Site will go live on May 4, 2021</Modal.Body>
+          <Modal.Body>Site will go live on May 6, 2021 @ 7pm CST</Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={handleClose}>
               Close
