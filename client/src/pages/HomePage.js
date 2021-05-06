@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Row, Image, Col, ProgressBar, Button, Modal } from "react-bootstrap";
-import ReactPlayer from 'react-player'
+import { Container, Row, Image, Col, ProgressBar, Button, Modal, FormControl, InputGroup } from "react-bootstrap";
+//import ReactPlayer from 'react-player'
 import { ToastContainer } from 'react-toastify';
-import { FacebookShareButton, TwitterShareButton, EmailShareButton } from "react-share";
-import { FacebookIcon, TwitterIcon, EmailIcon } from "react-share";
+import { FacebookShareButton, WhatsappShareButton, EmailShareButton, FacebookMessengerShareButton } from "react-share";
+import { FacebookIcon, WhatsappIcon, EmailIcon, FacebookMessengerIcon } from "react-share";
 
 import "../styles/main.css";
 
@@ -11,14 +11,14 @@ import placeholder from "../assets/ihhs.png";
 import stadium from "../assets/staduim.jpeg";
 
 import DonateCard from "../componets/DonateCard";
-import InConstruction from "../componets/InConstruction";
 import { DonationCardSection } from "../componets/DonationCardSection"
 import { BxShareAltIcon, BxChatIcon } from "../assets/icons";
+import TopDonatorsSection from '../componets/TopDonatorsSection';
 
 
 const Divider = () => {
     return (
-        <Row style={{marginTop: 20}}>
+        <Row style={{marginTop: 23}}>
             <hr style={{color: '#d4d4d4', backgroundColor: '#d4d4d4', height: 0.5, borderColor : '#d4d4d4', width: "100%"}} />
         </Row>
     )
@@ -38,6 +38,7 @@ export default class HomePage extends Component {
         }
 
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+        this.copytoclickboard = this.copytoclickboard.bind(this);
     }
 
     componentDidMount() {
@@ -55,6 +56,12 @@ export default class HomePage extends Component {
 
     updateWindowDimensions() {
         this.setState({ width: window.innerWidth, height: window.innerHeight });
+    }
+
+    copytoclickboard (e) {
+        this.refs.textArea.select();
+        document.execCommand('copy');
+        e.target.focus();
     }
 
     getDonationsData = () => {
@@ -94,7 +101,6 @@ export default class HomePage extends Component {
                         draggable
                         pauseOnHover
                     />
-                <InConstruction/>
                 <Row className="justify-content-center">
                     <Col lg={8} style={{marginTop: "30px"}}>
                         <Image src={placeholder} fluid />
@@ -143,7 +149,7 @@ export default class HomePage extends Component {
                 </Row>
                 <Divider/>
                 <Row style={{marginTop: 20}}>
-                    <Col lg={8}>
+                    <Col lg={7}>
                         <h3 className="about-us-header">About Us</h3>
                         <p className="about-us-text">
                         Welcome to the IHHS Grad 2021 fundraising website! <br/><br/>
@@ -151,14 +157,18 @@ export default class HomePage extends Component {
                         This year, the Grade 12 class of Indian Head High School will be holding their graduation ceremony at Mosaic Stadium.
                         In order to help support the graduating class pay for the rental fees for this facility, Bonfire Boys and friends will be holding a Sing-A-Thon fundraiser on Saturday, May 15.  <br/><br/>
                         
-                        We are looking forward to supporting our grads as they say farewell to one journey and embark on a new one.
+                        We are looking forward to supporting our grads as they say farewell to one journey and embark on a new one. <br/><br/>
+
+                        Please note, if the Indian Head 2021 Grad ceremony gets cancelled, all funds rasised will go to help all extra-curricular programs next year equally.
                         
                         </p>
                     </Col>
-                    <Col lg={4}> 
-                        <Image src={stadium} style={{borderRadius: "20px", width: "100%"}} fluid />
+                    <Col lg={5} style={{justifyContent: 'center'}}> 
+                            <Image src={stadium} style={{borderRadius: "20px", width: "100%"}} fluid />
                     </Col>
                 </Row>
+                <Divider/>
+                <TopDonatorsSection donations={this.state.donations} amountofdonations={this.state.amountofdonations} />
                 <Divider/>
                 <DonationCardSection donations={this.state.donations} amountofdonations={this.state.amountofdonations} />
                 <Divider/>
@@ -169,35 +179,55 @@ export default class HomePage extends Component {
             <Modal
                     show={this.state.share}
                     onHide={() => {this.setState({ share: false, })}}
+                    width={`30%`}
                 >
                     <Modal.Header closeButton>
                         <Modal.Title className="form-text">Share</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Row className="justify-content-around">
+                        <Row className="justify-content-center" >
                             <FacebookShareButton
                                 url={"https://ihgrad.com"}
-                                quote={"Indian Head High School Graduation Fundraiser"}
+                                quote={"Indian Head Graduation Fundraiser"}
                                 hashtag={"#ihgrad"}
                                 description={"Help the IHHS Grade Class of 2021 fundraise for their upcoming Graduation"}
-                                className="Demo__some-network__share-button"
+                                style={{marginLeft: "10px", marginRight: "10px"}}
                             >
                                 <FacebookIcon size={32} round />
                             </FacebookShareButton>
-                            <TwitterShareButton
+                            <FacebookMessengerShareButton
+                                style={{marginLeft: "10px", marginRight: "10px"}}
+                                url={"https://ihgrad.com"}
+                            >
+                                <FacebookMessengerIcon size={32} round />
+                            </FacebookMessengerShareButton>
+                            <WhatsappShareButton
+                                style={{marginLeft: "10px", marginRight: "10px"}}
                                 url={"https://ihgrad.com"}
                                 quote={"Indian Head High School Graduation Fundraiser"}
                                 hashtag={"#ihgrad"}
                             >
-                                <TwitterIcon size={32} round />
-                            </TwitterShareButton>
+                                <WhatsappIcon size={32} round />
+                            </WhatsappShareButton>
                             <EmailShareButton
-                                subject="Help Fundraise for the Indian Head High School Graduation"
+                                style={{marginLeft: "10px", marginRight: "10px"}}
+                                subject="Help the Indian Head Class of 2021 Have a Grad!"
                                 url={"https://ihgrad.com"}
-                                body="Hey there! I was wondering if you would be able to help me fundraise for the Indian Head High School Graduation."
+                                body="Help support the Indian Head High School graduation ceremony at Mosaic Staduim. Every little bit counts."
                             >
                                 <EmailIcon size={32} round />
                             </EmailShareButton>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <InputGroup style={{marginTop: "10px", width: "80%"}}>
+                                <FormControl
+                                    value={`https://ihgrad.com/`}
+                                    ref="textArea"
+                                />
+                                <InputGroup.Append>
+                                <Button variant="outline-secondary" onClick={this.copytoclickboard}>Copy</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
                         </Row>
                         <p style={{marginTop: "10px"}} className="form-text">Help by sharing with your friends and family!</p>
                     </Modal.Body>

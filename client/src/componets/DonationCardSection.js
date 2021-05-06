@@ -50,7 +50,7 @@ export class DonationCardSection extends Component {
     render() {
         return (
             <Container>
-                <Row className="justify-content-center">
+                <Row className="justify-content-center" style={{marginTop: "7px"}}>
                     <h3 className="donation-header">Recent Donations</h3>
                 </Row>
                 <Row className="justify-content-center">
