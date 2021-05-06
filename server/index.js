@@ -105,9 +105,20 @@ const addDonation = async (req, res) => {
   addDonationMETER.mark();
   try {
     try {
-      const name = filter.clean(req.body.name);
+      let name, message;
+      try {
+        name = filter.clean(req.body.name);
+      } catch (e) {
+        name = req.body.name;
+      }
+
+      try {
+        message = filter.clean(req.body.message);
+      } catch (e) {
+        message = req.body.message;
+      }
+
       const amount = req.body.amount;
-      const message = filter.clean(req.body.message);
       const checkout_session_id = req.body.checkout_session_id;
       const session = await stripe.checkout.sessions.retrieve(checkout_session_id);
       pool.query("SELECT checkout_session_id from donations;", (error, results) => {
@@ -116,7 +127,7 @@ const addDonation = async (req, res) => {
           'checkout_session_id': req.body.token
         }));
         if(!result){
-          pool.query('INSERT INTO donations (name, amount, message, checkout_session_id) VALUES ($1, $2, $3, $4)', [name, amount, message, checkout_session_id], (error, results) => {
+          pool.query('INSERT INTO donations (name, amount, message, checkout_session_id, created) VALUES ($1, $2, $3, $4, $5)', [name, amount, message, checkout_session_id, Date.now()], (error, results) => {
             if (!error) {
               res.status(201).json({ success: `Donation added` });
             } else {
@@ -130,6 +141,7 @@ const addDonation = async (req, res) => {
 
       })
     } catch (err){
+      console.log(err)
       badToken.inc();
       res.status(400).json({ error: "bad_token" });
     }
@@ -178,7 +190,7 @@ const checkoutInfo = async (req, res) => {
         if(!result){
           res.status(200).json({ name: "", amount: (session.amount_total / 100)});
           try {
-            pool.query("INSERT INTO success (amount, checkout_session_id) VALUES ($1, $2)", [session.amount_total / 100, req.body.token], (error, results) => {})
+            pool.query("INSERT INTO success (amount, checkout_session_id, created) VALUES ($1, $2, $3)", [session.amount_total / 100, req.body.token, parseInt(Date.now())], (error, results) => {})
           } catch (e) {}
         } else {
           reusedToken.inc();

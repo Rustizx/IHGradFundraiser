@@ -7,11 +7,25 @@ import "../styles/finalize.css";
 
 
 const ErrorScreen = (props) => {
+    let error;
+    if (props.error === "bad_token"){
+        error = "The given checkout session token does not exist. This can happen if you have edited the url."
+    } 
+    if (props.error === "already_used") {
+        error = "This given checkout session token has already been used before. This can happen if you have already submitted "
+    }
     return (
-        <div>
-            <p>Error</p>
-            <p>{props.errortype}</p>
-        </div>
+        <Row className="justify-content-center">
+            <Col lg={5} style={{marginTop: "20px"}}>
+                <Row className="justify-content-center">
+                    <h3 className="form-header">Error</h3>
+                </Row>
+                <Row className="justify-content-center">
+                    <p className="form-text">{`${error}`}</p>
+                    <p className="form-text">{` You will now be rediected to the home page in ${props.time_left} seconds... `}</p>
+                </Row>
+            </Col>
+        </Row>
     )
 }
 
@@ -30,6 +44,7 @@ export default class FinalizePage extends Component {
             submit: false,
             checkout_session_id: "",
             success: false,
+            time_left: 5,
         }
     
 
@@ -56,6 +71,7 @@ export default class FinalizePage extends Component {
                 if(!res.error){
                     this.setState({ amount: String(res.amount) })
                 } else {
+                    this.redirectToHome();
                     this.setState({ error: true, errortype: res.error })
                 }
             })
@@ -66,7 +82,7 @@ export default class FinalizePage extends Component {
     }
 
     addDonation() {
-        const routeChange = () => { this.routeChange(); }
+        const redirectToHome = () => { this.redirectToHome() };
         this.setState({ isLoading: true })
         const fetchPromise = fetch("/donation-add", {
             method: "POST",
@@ -76,8 +92,8 @@ export default class FinalizePage extends Component {
             body: JSON.stringify({
                 checkout_session_id: this.state.checkout_session_id,
                 amount: String(this.state.amount),
-                name: this.state.name,
-                message: this.state.message,
+                name: (this.state.name),
+                message: (this.state.message),
             })
         });
 
@@ -85,9 +101,7 @@ export default class FinalizePage extends Component {
             .then(res => {
                 if (res.status === 201){
                     this.setState({ success: true })
-                    setTimeout(function() { 
-                        routeChange()
-                    }, 5000);
+                    redirectToHome();
                 } else {
                     toast.error(`An error has occurred, please try again. Refreshing your page may help.`, {
                         position: "top-right",
@@ -114,6 +128,10 @@ export default class FinalizePage extends Component {
                 this.setState({ isLoading: false });
             })
         
+    }
+
+    countDown = () => {
+        this.setState({ time_left: this.state.time_left-1 });
     }
 
     handleNameChange = (event) => {
@@ -149,6 +167,26 @@ export default class FinalizePage extends Component {
                 progress: undefined,
             });
         }
+    }
+
+    redirectToHome = () => { 
+        const countDown = () => { this.countDown() };
+        const routeChange = () => { this.routeChange() };
+        setTimeout(function() { 
+            countDown();
+            setTimeout(function() { 
+                countDown();
+                setTimeout(function() { 
+                    countDown();
+                    setTimeout(function() { 
+                        countDown();
+                        setTimeout(function() { 
+                            routeChange()
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }, 1000);
     }
 
     routeChange = () => {
@@ -251,16 +289,16 @@ export default class FinalizePage extends Component {
         } else {
             return (
                 <Row className="justify-content-center">
-                        <Col lg={5} style={{marginTop: "20px"}}>
-                            <Row className="justify-content-center">
-                                <h3 className="form-header">Success</h3>
-                            </Row>
-                            <Row className="justify-content-center">
-                                <p className="form-text"> Your donation has been successfully proccessed! </p>
-                                <p className="form-text"> You will now be rediected to the home page in 5 seconds...</p>
-                            </Row>
-                        </Col>
-                    </Row>
+                    <Col lg={5} style={{marginTop: "20px"}}>
+                        <Row className="justify-content-center">
+                            <h3 className="form-header">Success</h3>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <p className="form-text"> Your donation has been successfully proccessed! </p>
+                            <p className="form-text">{` You will now be rediected to the home page in ${this.state.time_left} seconds... `}</p>
+                        </Row>
+                    </Col>
+                </Row>
             )
         }
     }
@@ -282,7 +320,7 @@ export default class FinalizePage extends Component {
                         />
                 <Container className="finalize-container">
                     {this.state.error
-                        ? <ErrorScreen errortype={this.state.errortype} />
+                        ? <ErrorScreen error={this.state.errortype} time_left={this.state.time_left}/>
                         : <this.FormScreen />
                     }
                 </Container>
