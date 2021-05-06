@@ -127,9 +127,15 @@ const addDonation = async (req, res) => {
           'checkout_session_id': req.body.token
         }));
         if(!result){
-          pool.query('INSERT INTO donations (name, amount, message, checkout_session_id, created) VALUES ($1, $2, $3, $4, $5)', [name, amount, message, checkout_session_id, Date.now()], (error, results) => {
+          pool.query('INSERT INTO donations (name, amount, message, checkout_session_id, created) VALUES ($1, $2, $3, $4, $5);', [name, amount, message, checkout_session_id, Date.now()], (error, results) => {
             if (!error) {
-              res.status(201).json({ success: `Donation added` });
+              pool.query('UPDATE success SET completed = true WHERE checkout_session_id = $1;', [checkout_session_id], (error, results) => {
+                if(!error){
+                  res.status(201).json({ success: `Donation added` });
+                } else {
+                  res.status(400).json(error);
+                }
+              })
             } else {
               res.status(400).json(error);
             }

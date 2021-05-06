@@ -48,6 +48,12 @@ export class DonationCardSection extends Component {
     }
 
     render() {
+        let max;
+        if((this.state.page*9) + 9 > this.props.amountofdonations){
+            max = this.props.amountofdonations;
+        } else {
+            max = (this.state.page*9) + 9;
+        }
         return (
             <Container>
                 <Row className="justify-content-center" style={{marginTop: "7px"}}>
@@ -57,7 +63,7 @@ export class DonationCardSection extends Component {
                     <div onClick={this.pageDown}>
                         <span className="far fa-arrow-alt-circle-left icon"/>
                     </div>
-                    <p className="donation-text">{`${(this.state.page*9 + 1)} - ${(this.state.page*9) + 9} out of ${this.props.amountofdonations}`}</p>
+                    <p className="donation-text">{`${(this.state.page*9 + 1)} - ${max} out of ${this.props.amountofdonations}`}</p>
                     <div onClick={this.pageUp}>
                         <span className="far fa-arrow-alt-circle-right icon"/>
                     </div>

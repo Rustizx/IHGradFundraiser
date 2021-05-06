@@ -173,7 +173,7 @@ export default class HomePage extends Component {
                 <DonationCardSection donations={this.state.donations} amountofdonations={this.state.amountofdonations} />
                 <Divider/>
                 <Row style={{marginTop: 20}} className="justify-content-center">
-                    <h5 className="footer-text">2021 © Josh Blayone. Developed by Josh Blayone</h5>
+                    <h5 className="footer-text">2021 © Josh Blayone. Developed by <a style={{color: "black"}} href="https://josh.blayone.com" >Josh Blayone</a></h5>
                 </Row>
             </Container>
             <Modal
