@@ -73,7 +73,7 @@ const pool = new Pool({
   user: ((process.env.MODE == "test") ? process.env.PG_USER_TEST : process.env.PG_USER_LIVE),
   host: ((process.env.MODE == "test") ? process.env.PG_HOST_TEST : process.env.PG_HOST_LIVE),
   database: ((process.env.MODE == "test") ? process.env.PG_DATABASE_TEST : process.env.PG_DATABASE_LIVE),
-  password: ((process.env.MODE == "test") ? process.env.PG_USER_TEST : process.env.PG_USER_LIVE),
+  password: ((process.env.MODE == "test") ? process.env.PG_PASSWORD_TEST : process.env.PG_PASSWORD_LIVE),
   port: ((process.env.MODE == "test") ? process.env.PG_PORT_TEST : process.env.PG_PORT_LIVE)
 });
 
