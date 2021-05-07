@@ -32,7 +32,7 @@ export default class HomePage extends Component {
             moneyFundraised: 0,
             totalDonations: 0,
             currentTotalViewers: 0,
-            donations: [],
+            donations: {},
             amountofdonations: 0,
             share: false,
         }
@@ -66,36 +66,24 @@ export default class HomePage extends Component {
 
     getDonationsData = () => {
         fetch('/donations')
-            .then(response => {
-                if (response.status === 200){
-                    const res = response.json()
-                    this.setState({ donations: res, amountofdonations: res.length });
-                } else {
-                    this.setState({ donations: [], amountofdonations: 0 });
-                }
-            })
-            .finally(() => {
-                this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 15000);
-            })
+          .then(response => response.json())
+          .then(res => {
+            this.setState({ donations: res, amountofdonations: res.length });
+            this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 15000);
+        });
     }
 
     getMoneyData = () => {
         fetch('/amount')
-            .then(response => {
-                if (response.status === 200){
-                    const res = response.json()
-                    if(!res.total){
-                        this.setState({ moneyFundraised: 0 });
-                    } else {
-                        this.setState({ moneyFundraised: res.total });
-                    }
-                } else {
-                    this.setState({ moneyFundraised: 0 });
-                }
-            })
-            .finally(() => {
-                this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 15000);
-            })
+          .then(response => response.json())
+          .then(res => {
+            if(!res.total){
+                this.setState({ moneyFundraised: 0 });
+            } else {
+                this.setState({ moneyFundraised: res.total });
+            }
+            this.intervalMoneyID = setTimeout(this.getMoneyData.bind(this), 15000);
+        });
     }
 
     render() {

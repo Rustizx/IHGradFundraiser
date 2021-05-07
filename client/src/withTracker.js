@@ -13,7 +13,6 @@ function GAListener({children, trackingId, history}) {
   useEffect(() => {
     ReactGA.initialize(trackingId);
     sendPageView(history.location);
-    console.log(history.location)
     return history.listen(sendPageView);
   }, [history, trackingId]);
 
