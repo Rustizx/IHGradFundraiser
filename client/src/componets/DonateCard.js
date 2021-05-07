@@ -7,7 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import '../styles/donation.css';
 
-const stripePromise = (String(process.env.REACT_APP_MODE) === 'test') ? loadStripe(process.env.REACT_APP_PUBLIC_API_TEST) : loadStripe(process.env.REACT_APP_PUBLIC_API_LIVE);
+const stripePromise = loadStripe(process.env.REACT_APP_PUBLIC_API);
 
 
 console.log()
