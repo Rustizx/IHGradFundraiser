@@ -11,7 +11,7 @@ function SimpleCard(props) {
                     <h3 className="donorcard-title">{props.donation.name}</h3>
                 </Row>
                 <Row className="justify-content-center">
-                    <h3 className="donorcard-amount">{`$${props.donation.amount} rasied`}</h3>
+                    <h3 className="donorcard-amount">{`$${props.donation.amount} raised`}</h3>
                 </Row>
             </Container>
         )
@@ -35,7 +35,7 @@ export default function TopDonatorsSection (props) {
             resMap.set(x.name, x.amount);
         else
             resMap.set(x.name, (x.amount + resMap.get(x.name)));
-            
+
         return 0;
     })
     resMap.forEach((value, key) => {

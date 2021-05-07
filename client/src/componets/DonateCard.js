@@ -7,8 +7,10 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import '../styles/donation.css';
 
-const stripePromise = loadStripe(process.env.REACT_APP_PUBLIC_API_TEST);
+const stripePromise = (String(process.env.REACT_APP_MODE) === 'test') ? loadStripe(process.env.REACT_APP_PUBLIC_API_TEST) : loadStripe(process.env.REACT_APP_PUBLIC_API_LIVE);
 
+
+console.log()
 const heightRatio = 0.32578125;
 const heightDefault = 1440;
 

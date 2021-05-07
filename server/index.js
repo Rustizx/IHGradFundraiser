@@ -4,7 +4,7 @@ const path = require('path');
 const express = require("express");
 const bodyParser = require('body-parser')
 const io = require('@pm2/io');
-const stripe = require('stripe')(process.env.API_SECRET_TEST);
+const stripe = require('stripe')(((process.env.MODE == "test") ? process.env.API_SECRET_TEST : process.env.API_SECRET_LIVE));
 
 const Pool = require('pg').Pool;
 const Filter = require('bad-words');
@@ -13,7 +13,7 @@ const Filter = require('bad-words');
 const PORT = process.env.PORT;
 const app = express();
 
-const YOUR_DOMAIN = process.env.DOMAIN;
+const YOUR_DOMAIN = (process.env.MODE == "test") ? process.env.URL_TEST : process.env.URL_LIVE;
 
 const filter = new Filter({ placeholder: "x" });
 
@@ -70,11 +70,11 @@ const isEqual = (first, second) => {
 // POSTGRES 
 
 const pool = new Pool({
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT
+  user: ((process.env.MODE == "test") ? process.env.PG_USER_TEST : process.env.PG_USER_LIVE),
+  host: ((process.env.MODE == "test") ? process.env.PG_HOST_TEST : process.env.PG_HOST_LIVE),
+  database: ((process.env.MODE == "test") ? process.env.PG_DATABASE_TEST : process.env.PG_DATABASE_LIVE),
+  password: ((process.env.MODE == "test") ? process.env.PG_USER_TEST : process.env.PG_USER_LIVE),
+  port: ((process.env.MODE == "test") ? process.env.PG_PORT_TEST : process.env.PG_PORT_LIVE)
 });
 
 
@@ -282,4 +282,5 @@ app.get('*', (req, res) => {
 // Report to console
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
+  console.log(`${process.env.MODE} mode`);
 });

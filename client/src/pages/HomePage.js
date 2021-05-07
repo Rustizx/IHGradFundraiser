@@ -155,11 +155,11 @@ export default class HomePage extends Component {
                         Welcome to the IHHS Grad 2021 fundraising website! <br/><br/>
 
                         This year, the Grade 12 class of Indian Head High School will be holding their graduation ceremony at Mosaic Stadium.
-                        In order to help support the graduating class pay for the rental fees for this facility, Bonfire Boys and friends will be holding a Sing-A-Thon fundraiser on Saturday, May 15.  <br/><br/>
+                        In order to help support the graduating class pay for the rental fees for this facility, Bonfire Boys will be holding a Sing-A-Thon fundraiser on Saturday, May 15.  <br/><br/>
                         
                         We are looking forward to supporting our grads as they say farewell to one journey and embark on a new one. <br/><br/>
 
-                        Please note, if the Indian Head 2021 Grad ceremony gets cancelled, all funds rasised will go to help all extra-curricular programs next year equally.
+                        { /*Please note, if the Indian Head 2021 Grad ceremony gets cancelled, all funds rasised will go to help all extra-curricular programs next year equally. */}
                         
                         </p>
                     </Col>
@@ -211,9 +211,9 @@ export default class HomePage extends Component {
                             </WhatsappShareButton>
                             <EmailShareButton
                                 style={{marginLeft: "10px", marginRight: "10px"}}
-                                subject="Help the Indian Head Class of 2021 Have a Grad!"
+                                subject="Help the Indian Head Class of 2021 Grads!"
                                 url={"https://ihgrad.com"}
-                                body="Help support the Indian Head High School graduation ceremony at Mosaic Staduim. Every little bit counts."
+                                body="Help us support the Indian Head High School grads hold their graduation ceremony at Mosaic Staduim. Every little bit counts."
                             >
                                 <EmailIcon size={32} round />
                             </EmailShareButton>
