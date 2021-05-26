@@ -155,7 +155,7 @@ export default class HomePage extends Component {
                         Welcome to the IHHS Grad 2021 fundraising website! <br/><br/>
 
                         This year, the Grade 12 class of Indian Head High School will be holding their graduation ceremony at Mosaic Stadium.
-                        In order to help support the graduating class pay for the rental fees for this facility, Bonfire Boys will be holding a Sing-A-Thon fundraiser on Saturday, May 15.  <br/><br/>
+                        In order to help support the graduating class pay for the rental fees for this facility, Bonfire Boys will be holding a Sing-A-Thon fundraiser on Friday, June 4.  <br/><br/>
                         
                         We are looking forward to supporting our grads as they say farewell to one journey and embark on a new one. <br/><br/>
 
