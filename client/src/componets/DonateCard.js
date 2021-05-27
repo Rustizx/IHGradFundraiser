@@ -31,7 +31,7 @@ export default class DonateCard extends Component {
             height: 0,
             amount: "20",
             error: "",
-            errorAmount: 4350,
+            errorAmount: 4900,
         };
 
 

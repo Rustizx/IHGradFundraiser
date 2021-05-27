@@ -28,7 +28,7 @@ export default class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            moneyGoal: 4350,
+            moneyGoal: 4900,
             moneyFundraised: 0,
             totalDonations: 0,
             currentTotalViewers: 0,
