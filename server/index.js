@@ -224,7 +224,7 @@ const createCheckoutSession = async (req, res) => {
   try {
     let amount = parseInt(String(req.body.amount) + "00");
     stripe.balance.retrieve(async (err, balance) => {
-      if ( amount > 500 && amount < (440000-((balance.pending[0].amount)*1.04)) && !err ) {
+      if ( amount > 500 && amount < (435000-((balance.pending[0].amount)*1.04)) && !err ) {
         const session = await stripe.checkout.sessions.create({
           payment_method_types: ['card'],
           line_items: [
@@ -247,7 +247,7 @@ const createCheckoutSession = async (req, res) => {
         });
         res.status(200).json({ id: session.id });
       } else {
-        res.status(400).json({ error: "amount", amount: Math.floor((440000-((balance.pending[0].amount)*1.04)) / 100)});
+        res.status(400).json({ error: "amount", amount: Math.floor((435000-((balance.pending[0].amount)*1.04)) / 100)});
       }
     });
   } catch (e) {
