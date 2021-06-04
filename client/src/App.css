@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Concert+One:regular");
+
 .nav {
   background: linear-gradient(to bottom right, #ff8955, #ffaa80);
   text-align: center;
@@ -10,7 +12,7 @@
   font-style: normal;
   font-size: 65;
   text-align: left;
-  color: #FFFFFF;
+  color: #ffffff;
   text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
   margin-top: 10px;
   margin-bottom: 10px;

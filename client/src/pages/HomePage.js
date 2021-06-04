@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Image, Col, ProgressBar, Button, Modal, FormControl, InputGroup } from "react-bootstrap";
+import { Container, Row, Image, Col, ProgressBar, Button, Modal, FormControl, InputGroup, Navbar } from "react-bootstrap";
 //import ReactPlayer from 'react-player'
 import { ToastContainer } from 'react-toastify';
 import { FacebookShareButton, WhatsappShareButton, EmailShareButton, FacebookMessengerShareButton } from "react-share";
@@ -89,6 +89,11 @@ export default class HomePage extends Component {
     render() {
         return (
             <>
+            <Container>
+                <Navbar className="nav justify-content-center" fixed="top" fluid="true" style={{height: "80px"}}>
+                    <h1 className="nav-title">IHHS Graduation</h1>
+                </Navbar>
+            </Container>
             <Container className="home-container" >
                 <ToastContainer
                         position="top-right"

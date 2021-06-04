@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Form, Col, Row, Container, Spinner, Button, Modal } from 'react-bootstrap';
+import { Form, Col, Row, Container, Spinner, Button, Modal, Navbar } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { SimpleCard } from '../componets/DonationCardSection';
 
@@ -307,6 +307,11 @@ export default class FinalizePage extends Component {
 
         return (
             <>
+            <Container>
+                <Navbar className="nav justify-content-center" fixed="top" fluid="true" style={{height: "80px"}}>
+                    <h1 className="nav-title">IHHS Graduation</h1>
+                </Navbar>
+            </Container>
                 <ToastContainer
                             position="top-right"
                             autoClose={5000}
