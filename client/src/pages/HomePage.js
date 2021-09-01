@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Image, Col, ProgressBar, Button, Modal, FormControl, InputGroup, Navbar } from "react-bootstrap";
-import ReactPlayer from 'react-player'
+//import ReactPlayer from 'react-player'
 import { ToastContainer } from 'react-toastify';
 import { FacebookShareButton, WhatsappShareButton, EmailShareButton, FacebookMessengerShareButton } from "react-share";
 import { FacebookIcon, WhatsappIcon, EmailIcon, FacebookMessengerIcon } from "react-share";
@@ -108,11 +108,13 @@ export default class HomePage extends Component {
                     />
                 <Row className="justify-content-center">
                     <Col lg={8} style={{marginTop: "30px"}}>
-                        <ReactPlayer url="https://www.facebook.com/ihgrad/videos/969388713821201" 
+                        <Image src={placeholder} fluid />
+                        { /** <ReactPlayer url="https://www.facebook.com/ihgrad/videos/969388713821201" 
                             playing="true" 
                             width={`100`} 
                             height={`10`}  
                             controls />
+        8**/}
                     </Col>
                     <Col lg={4} style={{marginTop: "30px"}}> 
                         <DonateCard amountleft={this.state.moneyGoal-this.state.moneyFundraised} />
