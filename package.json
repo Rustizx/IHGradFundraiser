@@ -25,7 +25,7 @@
     "stripe": "^8.145.0"
   },
   "engines": {
-    "node": "14.16.0"
+    "node": "16.14.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3"

@@ -15,6 +15,8 @@ import { DonationCardSection } from "../componets/DonationCardSection"
 import { BxShareAltIcon, BxChatIcon } from "../assets/icons";
 import TopDonatorsSection from '../componets/TopDonatorsSection';
 
+import donationData from "../data/donations";
+
 
 const Divider = () => {
     return (
@@ -65,25 +67,12 @@ export default class HomePage extends Component {
     }
 
     getDonationsData = () => {
-        fetch('/donations')
-          .then(response => response.json())
-          .then(res => {
-            this.setState({ donations: res, amountofdonations: res.length });
-            this.intervalDonationsID = setTimeout(this.getDonationsData.bind(this), 15000);
-        });
+        this.setState({ donations: donationData, amountofdonations: donationData.length });
     }
 
     getMoneyData = () => {
-        fetch('/amount')
-          .then(response => response.json())
-          .then(res => {
-            if(!res.total){
-                this.setState({ moneyFundraised: 0 });
-            } else {
-                this.setState({ moneyFundraised: res.total });
-            }
-            this.intervalMoneyID = setTimeout(this.getMoneyData.bind(this), 15000);
-        });
+        this.setState({ moneyFundraised: 5020 });
+
     }
 
     render() {
@@ -109,12 +98,6 @@ export default class HomePage extends Component {
                 <Row className="justify-content-center">
                     <Col lg={8} style={{marginTop: "30px"}}>
                         <Image src={placeholder} fluid />
-                        { /** <ReactPlayer url="https://www.facebook.com/ihgrad/videos/969388713821201" 
-                            playing="true" 
-                            width={`100`} 
-                            height={`10`}  
-                            controls />
-        8**/}
                     </Col>
                     <Col lg={4} style={{marginTop: "30px"}}> 
                         <DonateCard amountleft={this.state.moneyGoal-this.state.moneyFundraised} />
@@ -129,7 +112,9 @@ export default class HomePage extends Component {
                         <p className="home-donationbar-text">{`Raised out of $${this.state.moneyGoal}`}</p>
                     </Col>
                     <Col md={2}>
-                        <h3 className="home-donationbar-header">{`$${this.state.moneyGoal-this.state.moneyFundraised}`}</h3>
+                        { (this.state.moneyGoal-this.state.moneyFundraised) > 0 ?
+                        <h3 className="home-donationbar-header">{`$${this.state.moneyGoal-this.state.moneyFundraised}`}</h3> :
+                        <h3 className="home-donationbar-header">$0</h3> }
                         <p className="home-donationbar-text">Needed to Complete Goal</p>
                     </Col>
                     <Col md={2}>
@@ -179,7 +164,7 @@ export default class HomePage extends Component {
                 <DonationCardSection donations={this.state.donations} amountofdonations={this.state.amountofdonations} />
                 <Divider/>
                 <Row style={{marginTop: 20}} className="justify-content-center">
-                    <h5 className="footer-text">2021 © Josh Blayone. Developed by <a style={{color: "black"}} href="https://josh.blayone.com" >Josh Blayone</a></h5>
+                    <h5 className="footer-text">2021 © Josh Blayone. Developed by <a style={{color: "black"}} href="https://josh.blayone.com" >Josh Blayone</a>. Demo Site.</h5>
                 </Row>
             </Container>
             <Modal
